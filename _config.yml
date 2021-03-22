@@ -131,8 +131,8 @@ theme_color: spacegrey
 # Page default value
 defaults:
  home:
-    heading: "Stay hungury, stay foolish"
-    subheading: "怕什么真理无穷，进一寸有进一寸的欢喜。"
+    heading: "Welcome to my blog!"
+    subheading: "Stay hungury, stay foolish."
     banner: "Your image url"
 
 # Excerpt size setting
