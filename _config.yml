@@ -129,11 +129,11 @@ yat:
 #   - about.md
 
 # Page default value
-defaults:
-  home:
-    heading: "Stay hungury, stay foolish"
-    subheading: "Your awesome subheading"
-    banner: "Your image url"
+# defaults:
+#  home:
+#     heading: "Stay hungury, stay foolish"
+#     subheading: "Your awesome subheading"
+#     banner: "Your image url"
 
 # Excerpt size setting
 # excerpt_size: 350
