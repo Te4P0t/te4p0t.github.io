@@ -52,7 +52,7 @@ yat:
 # google_analytics: [Tracking ID]
 
 # If you want to generate website sitemap, you can set true
-# sitemap: false
+sitemap: true
 
 # If you want to change site language, you can set lang option
 # lang: "en"  # default lang is en
@@ -90,10 +90,10 @@ yat:
 # You can choose a theme color
 # Default theme colors as below:
 # coolblack: #090a0b
-# spacegrey: #353535
+spacegrey: #353535
 # snowwhite: #ffffff
 #
-# theme_color: spacegrey
+theme_color: spacegrey
 #
 # Custom color as below:
 # theme_color: "#882250"
@@ -129,11 +129,11 @@ yat:
 #   - about.md
 
 # Page default value
-# defaults:
-#  home:
-#     heading: "Stay hungury, stay foolish"
-#     subheading: "Your awesome subheading"
-#     banner: "Your image url"
+defaults:
+ home:
+    heading: "Stay hungury, stay foolish"
+    subheading: "怕什么真理无穷，进一寸有进一寸的欢喜。"
+    banner: "Your image url"
 
 # Excerpt size setting
 # excerpt_size: 350
