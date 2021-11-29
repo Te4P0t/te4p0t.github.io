@@ -57,8 +57,8 @@ sitemap: true
 # If you want to change site language, you can set lang option
 # lang: "en"  # default lang is en
 
-Translate languges
-langs refer to https://cloud.google.com/translate/docs/languages
+# Translate languges
+# langs refer to https://cloud.google.com/translate/docs/languages
 translate_langs:
   - lang: en
     text: English
@@ -130,10 +130,10 @@ theme_color: spacegrey
 
 # Page default value
 defaults:
- home:
-    heading: "Welcome to my blog!"
-    subheading: "Stay hungury, stay foolish."
-    banner: "Your image url"
+home:
+heading: "Welcome to my blog!"
+subheading: "Stay hungury, stay foolish."
+banner: "Your image url"
 
 # Excerpt size setting
 # excerpt_size: 350
@@ -146,12 +146,12 @@ defaults:
 #   shortname: "Your Disqus username"
 
 # Gitment comments
-# gitment:
-#   username: "Your GitHub username"
-#   repo: "The repo to store comments"
-#   client_id: "Your client ID"
-#   client_secret: "Your client secret"
-#   redirect_uri: "Your redirect url"   # If you use a custom domain name
+gitment:
+  username: "Your GitHub username"
+  repo: "The repo to store comments"
+  client_id: "Your client ID"
+  client_secret: "Your client secret"
+  redirect_uri: "Your redirect url"   # If you use a custom domain name
 
 # Build settings
 # highlighter: none
