@@ -68,11 +68,11 @@ translate_langs:
     text: Franch
 
   - lang: zh-CN
-    img: https://flagpedia.net/data/flags/w580/cn.png
+    img: https://raw.githubusercontent.com/VildMedPap/countryflags/4dd162cc9e888e74cfea900f63e8d9b6b9feb4fc/flags/china-flag.svg
     text: Chinese(Simple)
 
   - lang: zh-TW
-    img: https://flagpedia.net/data/flags/w580/cn.png
+    img: https://raw.githubusercontent.com/VildMedPap/countryflags/4dd162cc9e888e74cfea900f63e8d9b6b9feb4fc/flags/china-flag.svg
     text: Chinese(Traditional)
 
   - lang: ja
