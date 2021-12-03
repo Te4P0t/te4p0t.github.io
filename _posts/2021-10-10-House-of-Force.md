@@ -2,7 +2,7 @@
 layout: post
 title: House of Force
 subheading: 学学pwn
-author: xyccq
+author: Te4P0t
 categories: pwn
 tags: pwn
 ---
@@ -225,7 +225,7 @@ rax = 0x00007ffff7dd1b10
 
 ## hitcontraining_bamboobox
 
-![image-20211012002823560](https://xyccq.github.io/assets/images/2021-10/image-20211012002823560.png)
+![image-20211012002823560](https://te4p0t.github.io/assets/images/2021-10/image-20211012002823560.png)
 
 main函数中首先malloc一个0x10的堆块，存放着hello_message函数和goodbye_message函数指针。分别在main函数开始和输入“5”程序退出时调用。
 
@@ -233,11 +233,11 @@ main函数中首先malloc一个0x10的堆块，存放着hello_message函数和go
 
 设想：如果能够将堆中goodbye_message地址改为magic函数地址，那么输入“5”退出时就会执行漏洞程序。
 
-![image-20211012002349328](https://xyccq.github.io/assets/images/2021-10/image-20211012002349328.png)
+![image-20211012002349328](https://te4p0t.github.io/assets/images/2021-10/image-20211012002349328.png)
 
 edit没有检测长度，存在栈溢出，可以控制top chunk的size域（满足条件1）
 
-![image-20211012002500311](https://xyccq.github.io/assets/images/2021-10/image-20211012002500311.png)
+![image-20211012002500311](https://te4p0t.github.io/assets/images/2021-10/image-20211012002500311.png)
 
 add函数没有malloc申请size限制（满足条件2）
 
@@ -297,6 +297,6 @@ p.interactive()												# 输入5执行漏洞程序
 
 ```
 
-![image-20211012003455672](https://xyccq.github.io/assets/images/2021-10/image-20211012003455672.png)
+![image-20211012003455672](https://te4p0t.github.io/assets/images/2021-10/image-20211012003455672.png)
 
 拿到flag

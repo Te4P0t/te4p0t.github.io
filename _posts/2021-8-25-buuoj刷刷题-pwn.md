@@ -2,7 +2,7 @@
 layout: post
 title: buuoj刷刷题(pwn)
 subheading: 学学pwn
-author: xyccq
+author: Te4P0t
 categories: pwn
 tags: pwn
 
@@ -12,11 +12,11 @@ tags: pwn
 
 ## babyfengshui_33c3_2016
 
-![](https://xyccq.github.io/assets/images/typora-user-images/image-20210826171715164.png)
+![](https://te4p0t.github.io/assets/images/typora-user-images/image-20210826171715164.png)
 
 漏洞所在处，判断是否越界，用description的起始地址加上输入的长度，如果判断大于name起始地址-4（去掉size段）。即溢出。
 
-![image-20210826172406015](https://xyccq.github.io/assets/images/typora-user-images/image-20210826172406015.png)
+![image-20210826172406015](https://te4p0t.github.io/assets/images/typora-user-images/image-20210826172406015.png)
 
 存储形式，红框为description的chunk，其余为name的chunk。蓝框为description的起始地址，随后才是name的内容。
 
@@ -95,17 +95,17 @@ p.interactive()
 
 hitcontraining_magicheap的改进版
 
-![image-20210826235002399](https://xyccq.github.io/assets/images/typora-user-images/image-20210826235002399.png)
+![image-20210826235002399](https://te4p0t.github.io/assets/images/typora-user-images/image-20210826235002399.png)
 
 菜单界面，当输入4869，且$magic>=4869$​​时调用l33t函数。
 
-![image-20210826235833641](https://xyccq.github.io/assets/images/typora-user-images/image-20210826235833641.png)
+![image-20210826235833641](https://te4p0t.github.io/assets/images/typora-user-images/image-20210826235833641.png)
 
 edit函数中可以重新设置输入的size，那么就可以溢出了。从而控制fastbin中chunk的fd指针。
 
 magic在bss段，可以通过house of spirit在magic前找到能够制造fake chunk的地方，制造了fake chunk后对其进行edit修改magic值。（也可通过unsorted bin attack来修改）
 
-![image-20210826235728646](https://xyccq.github.io/assets/images/typora-user-images/image-20210826235728646.png)
+![image-20210826235728646](https://te4p0t.github.io/assets/images/typora-user-images/image-20210826235728646.png)
 
 这里可以，并且可以看到magic是0。
 
@@ -174,7 +174,7 @@ edit(len(payload), 0, payload)
 add(0x80, 'teapot')
 ```
 
-![image-20210827000220767](https://xyccq.github.io/assets/images/typora-user-images/image-20210827000220767.png)
+![image-20210827000220767](https://te4p0t.github.io/assets/images/typora-user-images/image-20210827000220767.png)
 
 
 
@@ -834,7 +834,7 @@ p.interactive()
 
 ## wustctf2020_closed
 
-![image-20210905234341275](https://xyccq.github.io/assets/images/typora-user-images/image-20210905234341275.png)
+![image-20210905234341275](https://te4p0t.github.io/assets/images/typora-user-images/image-20210905234341275.png)
 
 关了1（标准输出）和2（标准错误），因此及时getshell了也看不见输出。
 
@@ -844,7 +844,7 @@ exec 1>&0
 
 通过exec 1>&0来把标准输出重定向到文件描述符0(标准输入)
 
-![image-20210905234610322](https://xyccq.github.io/assets/images/typora-user-images/image-20210905234610322.png)
+![image-20210905234610322](https://te4p0t.github.io/assets/images/typora-user-images/image-20210905234610322.png)
 
 
 
