@@ -152,8 +152,8 @@ theme_color: spacegrey
 # Page default value
 # defaults:
 #   home:
-#     heading: "Your awesome heading"
-#     subheading: "Your awesome subheading"
+#     heading: "Welcome to my blog!"
+#     subheading: "Stay hungry. Stay foolish."
 #     banner: "Your image url"
 
 # Banner default settings
