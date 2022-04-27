@@ -3,8 +3,8 @@ layout: post
 title: ReLaMa-Image-inpainting
 subheading: 融合傅里叶卷积与注意力的大范围图像修复
 author: te4p0t
-categories: coding
-tags: Coding
+categories: Project
+tags: Computer-Vision Mechain-Learning Project-Report
 
 ---
 
